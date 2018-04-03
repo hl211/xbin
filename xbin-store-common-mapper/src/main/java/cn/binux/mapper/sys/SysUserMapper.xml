@@ -158,7 +158,7 @@
       #{userRegisterDate,jdbcType=VARCHAR}, #{userLastDate,jdbcType=TIMESTAMP}, #{userPassDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="cn.binux.pojo.sys.SysUser" >
+  <insert id="insertSelective" parameterType="cn.binux.pojo.sys.SysUser" useGeneratedKeys="true" keyProperty="userId">
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >

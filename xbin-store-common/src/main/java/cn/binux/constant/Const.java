@@ -96,5 +96,6 @@ public final class Const {
     public static final String XBIN_STORE_CART_VERSION = "1.0.0";
     public static final String XBIN_STORE_ITEM_VERSION = "1.0.0";
     public static final String XBIN_STORE_SHIRO_VERSION="1.0.0";
+    public static final String XBIN_STORE_API_VERSION="1.0.0";
 
 }

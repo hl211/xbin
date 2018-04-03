@@ -1,22 +1,23 @@
 package cn.binux.admin.controller;
 
-import cn.binux.admin.service.ContentService;
+import cn.binux.admin.service.RoleService;
+import cn.binux.admin.service.UserRoleService;
 import cn.binux.admin.service.UserService;
 import cn.binux.admin.vo.ManageUserVO;
 import cn.binux.constant.Const;
-import cn.binux.pojo.TbCategorySecondary;
 import cn.binux.pojo.XbinResult;
+import cn.binux.pojo.sys.SysRole;
 import cn.binux.pojo.sys.SysUser;
+import cn.binux.pojo.sys.SysUserRole;
 import com.alibaba.dubbo.config.annotation.Reference;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -31,11 +32,15 @@ import java.util.Random;
 @Controller
 public class AdminController {
 
-    @Reference(version = Const.XBIN_STORE_ADMIN_VERSION)
-    private ContentService contentService;
 
-    @Reference(version = Const.XBIN_STORE_SHIRO_VERSION)
+    @Reference(version = Const.XBIN_STORE_API_VERSION)
     private UserService userService;
+
+    @Reference(version = Const.XBIN_STORE_API_VERSION)
+    private RoleService roleService;
+
+    @Reference(version = Const.XBIN_STORE_API_VERSION)
+    private UserRoleService userRoleService;
 
 
     private Random random = new Random();
@@ -106,8 +111,6 @@ public class AdminController {
     @RequestMapping("/show/category")
     public String showCategory(Model model) {
         int nub = random.nextInt(60000);
-
-
         model.addAttribute("random", nub);
 
         return "category";
@@ -117,90 +120,148 @@ public class AdminController {
     @RequestMapping("/show/userManagement")
     public String showuserManagement(Model model) {
         int nub = random.nextInt(60000);
-
-
         model.addAttribute("random", nub);
 
         return "../pages/userManagement";
     }
 
-    @RequestMapping("/user/getUserData")
+    /**
+     * describe: TODO user
+     * creat_user: hl
+     * creat_date: 2018-04-02
+     * creat_time: 21:32
+     **/
+    @RequestMapping(value = "/user" , method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> getUserData(Model model, Integer pageIndex, Integer pageSize) {
+    public Map<String, Object> getUserData(Integer pageIndex, Integer pageSize) {
         Map<String, Object> lists = userService.getSysUserList(pageIndex,pageSize);
         return lists;
     }
-
-    @RequestMapping("/user/getUserRoleData")
+    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     @ResponseBody
-    public List<SysUser> getUserRoleData(SysUser sysUser) {
-        return userService.getSysUserRoleByBean(sysUser);
+    public XbinResult addUserData(String userAccount, String userPass,
+                                  String userTel, String userEmail, String userSex,
+                                  String userStatus, HttpServletRequest request) {
+        String[] ids=request.getParameterValues("RoleId[]");
+        //添加该用户
+        SysUser sysUser=new SysUser();
+        sysUser.setUserAccount(userAccount);
+        sysUser.setUserPass(userPass);
+        sysUser.setUserTel(userTel);
+        sysUser.setUserEmail(userEmail);
+        sysUser.setUserStatus(Integer.valueOf(userStatus));
+        sysUser.setUserSex(Integer.valueOf(userSex));
+        sysUser.setUserRegisterDate(new Date().toString());
+
+        XbinResult xbinResult=userService.saveSysUser(sysUser);
+        //添加角色为该用户
+        boolean flag=true;
+        if(xbinResult.isOK()){
+            Long uid=(Long) xbinResult.getData();
+            for(String id:ids) {
+                SysUserRole sysUserRole=new SysUserRole();
+                sysUserRole.setUserId(uid);
+                sysUserRole.setRoleId(Integer.valueOf(id));
+                if(!userRoleService.saveSysUserRole(sysUserRole).isOK()){
+                    flag=false;
+                    continue;
+
+                }
+            }
+        }
+        return flag==true?XbinResult.ok():XbinResult.build(400,"error");
+    }
+    @RequestMapping(value = "/user/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public XbinResult delUserData( String ids) {
+        if(ids!=null) {
+        String[] uids=ids.split(",");
+
+        //先删除角色
+        userRoleService.deleteSysUserRoleByUid(uids);
+        //删除用户
+        XbinResult result = userService.deleteSysUserById(uids);
+            return result;
+        }
+        return XbinResult.build(400,"ids为空");
     }
 
-
-    @RequestMapping("/user/deleteUserById")
+    @RequestMapping(value = "/user/update",method = RequestMethod.POST)
     @ResponseBody
-    public XbinResult delUserData(Model model, String ID) {
-        String[] list=ID.split(",");
+    public XbinResult updateUserData(Model model, String IDS) {
+        String[] list=IDS.split(",");
         XbinResult result = userService.deleteSysUserById(list);
         return result;
     }
 
-    @RequestMapping("/user/addUser")
+    /**
+     * describe: TODO Role
+     * creat_user: hl
+     * creat_date: 2018-04-02
+     * creat_time: 21:48
+     **/
+    @RequestMapping(value = "/role" , method = RequestMethod.GET)
     @ResponseBody
-    public XbinResult saveUserData(Model model, SysUser sysUser) {
+    public Map<String, Object> getRoleData(Integer pageIndex, Integer pageSize) {
+        Map<String, Object> lists = roleService.getSysRoleList(pageIndex,pageSize);
+        return lists;
+    }
+    @RequestMapping(value = "/role/all" , method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getRoleAllData(Integer pageIndex, Integer pageSize) {
+        Map<String, Object> lists = roleService.getSysRoleAll();
+        return lists;
+    }
+    @RequestMapping(value = "/role/add", method = RequestMethod.POST)
+    @ResponseBody
+    public XbinResult addRoleData(SysRole sysRole) {
+        XbinResult result = roleService.saveSysRole(sysRole);
+        return result;
+    }
+    @RequestMapping(value = "/role/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public XbinResult delRoleData( String IDS) {
+        String[] list=IDS.split(",");
+        XbinResult result = roleService.deleteSysRoleById(list);
+        return result;
+    }
+    @RequestMapping(value = "/role/update",method = RequestMethod.POST)
+    @ResponseBody
+    public XbinResult updateRoleData(Model model,SysRole sysRole) {
+        XbinResult result = roleService.saveSysRole(sysRole);
+        return result;
+    }
+/**
+ * describe: TODO  permission
+ * creat_user: hl
+ * creat_date: 2018-04-02
+ * creat_time: 21:50
+ **/
+
+
+/**
+ * describe: TODO  user-role
+ * creat_user: hl
+ * creat_date: 2018-04-02
+ * creat_time: 21:51
+ **/
+    @RequestMapping(value = "/userrole" , method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getUserRoleData(Integer pageIndex, Integer pageSize) {
+        Map<String, Object> lists = userService.getSysUserRole(pageIndex,pageSize);
+        return lists;
+    }
+    @RequestMapping(value = "/userrole/add", method = RequestMethod.POST)
+    @ResponseBody
+    public XbinResult addUserRoleData(SysUser sysUser) {
         XbinResult result = userService.saveSysUser(sysUser);
         return result;
     }
-
-    @RequestMapping("/show/twoCategory")
-    public String showTwoCategory(Model model) {
-        int nub = random.nextInt(60000);
-
-        model.addAttribute("random", nub);
-
-        return "twoCategory";
-    }
-    @RequestMapping("/category/getTableData")
+    @RequestMapping(value = "/userrole/delete",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> getCategory(Model model, Integer sEcho, Integer iDisplayStart, Integer iDisplayLength) {
-
-        Map<String, Object> lists = contentService.getCategoryList(sEcho,iDisplayStart,iDisplayLength);
-
-        return lists;
+    public XbinResult delUserRoleData( String IDS) {
+        String[] list=IDS.split(",");
+        XbinResult result = userService.deleteSysUserById(list);
+        return result;
     }
-
-    @RequestMapping("/category/secondary/getTableData")
-    @ResponseBody
-    public Map<String, Object> getCategorySecondary(Model model,String sSearch, Integer sEcho, Integer iDisplayStart, Integer iDisplayLength) {
-        if (StringUtils.isNotBlank(sSearch)) {
-            try {
-                sSearch = new String(sSearch.getBytes("iso8859-1"), "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Map<String, Object> lists = contentService.getSearchCategorySecondaryList(sSearch,sEcho,iDisplayStart,iDisplayLength);
-            return lists;
-        }
-        Map<String, Object> lists = contentService.getCategorySecondaryList(sEcho,iDisplayStart,iDisplayLength);
-
-        return lists;
-    }
-
-    @RequestMapping("/save/category")
-    @ResponseBody
-    public XbinResult saveCategory(String id, String name, Integer sort_order) {
-
-
-        return contentService.saveCategory(id, name, sort_order);
-    }
-    @RequestMapping("/save/category/secondary")
-    @ResponseBody
-    public XbinResult saveCategorySecondary(TbCategorySecondary categorySecondary) {
-
-
-        return contentService.saveCategorySecondary(categorySecondary);
-    }
-
-
 }

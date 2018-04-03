@@ -18,9 +18,9 @@ public class XbinStoreServiceAdminApplicationTests {
    private UserService us;
 	@Test
 	public void contextLoads() {
-		SysUser sysUser=new SysUser();
-		List<SysUser> list=us.getSysUserRoleByBean(sysUser);
-		System.out.println(list.size());
+
+		System.out.println(us.getSysUserList(1,4));
+
 	}
 
 }

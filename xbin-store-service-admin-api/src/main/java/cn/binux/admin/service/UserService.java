@@ -16,11 +16,12 @@ public interface UserService {
      * creat_time: 15:53
      **/
       Map<String, Object> getSysUserList(Integer pageIndex, Integer pageSize);
-      Map<String, Object> getSysUserList(Integer pageIndex, Integer pageSize,SysUser user);
-      List<SysUser> getSysUserByBean(SysUser user);
-      XbinResult saveSysUser(SysUser user);
-      XbinResult deleteSysUserById(String [] id);
+      Map<String, Object> getSysUserList(Integer pageIndex, Integer pageSize,SysUser sysUser);
+      List<SysUser> getSysUserByBean(SysUser sysUser);
+      XbinResult saveSysUser(SysUser sysUser);
+      XbinResult deleteSysUserById(String [] ids);
+      XbinResult updateSysUserById(SysUser sysUser);
 
-      List<SysUser> getSysUserRoleByBean(SysUser user);
+      Map<String, Object> getSysUserRole(Integer pageIndex, Integer pageSize);
 
 }
