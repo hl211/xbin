@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
@@ -134,8 +135,15 @@ public class AdminController {
     @RequestMapping(value = "/user" , method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> getUserData(Integer pageIndex, Integer pageSize) {
-        Map<String, Object> lists = userService.getSysUserList(pageIndex,pageSize);
-        return lists;
+        //获取用户
+        Map<String, Object> map= userService.getSysUserList(pageIndex,pageSize);
+        //获取用户对应的角色
+        ArrayList list=(ArrayList)map.get("aData");
+        for (Object o:list){
+            Long uid=((SysUser)o).getUserId();
+            ((SysUser)o).setRoles(roleService.getSysRoleByUserId(uid.intValue()));
+        }
+        return map;
     }
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     @ResponseBody

@@ -25,6 +25,7 @@ public interface RoleService {
       XbinResult deleteSysRoleById(String[] ids);
       XbinResult updateSysRoleById(SysRole sysRole);
 
+      List<SysRole> getSysRoleByUserId(Integer userId);
 
 
 }

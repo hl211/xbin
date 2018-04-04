@@ -199,7 +199,7 @@
 									<i class="fa fa-unlock" style="color:green">正常</i>
 								</label>
 								<label>
-									<input type="radio" name="userStatus" value=0/>
+									<input type="radio" name="userStatus" value=0  checked="checked"  />
 									<i class="fa fa-lock" style="color:red">锁定</i>
 								</label>
 							</div>
@@ -333,7 +333,7 @@
         $('#mytab').bootstrapTable({
             method: 'post',
             contentType: "application/x-www-form-urlencoded",
-            url:"/userrole",
+            url:"/user",
             striped: true, //是否显示行间隔色
             dataField: "rows",
             pageNumber: 1, //初始化加载第一页，默认第一页
@@ -410,7 +410,12 @@
                     field:'roles',
                     align:'center',
                     formatter:function operateFormatter(value,row,index){
-                      alert(row)
+                        var html='';
+                        for(var i=0;i<row.roles.length;i++){
+                            html=html+'<span class="glyphicon glyphicon-user" id="'
+                                +row.roles[i].roleId+'"></span>'+row.roles[i].roleName;
+                        }
+                        return html;
                     }
                 }
             ],
@@ -688,21 +693,20 @@
             //先清空角色复选框
             $('#editForm .edit input').prop('checked',false);
             //获取用户角色
-            $.post('../index.php/admin/Index/getUserById',
-                {ID:dataArr[0].ID},
-                function(data){
-                    var roleIDArr=data.res.user.RoleID;
-                    //将对应用户的角色列表显示到对应的修改页
-                    for(var i=0;i<roleIDArr.length;i++){
-                        for(var j=0;j<$('#editForm .edit input').length;j++){
-                            if(roleIDArr[i]==$('#editForm .edit input:eq('+j+')').val()){
-                                $('#editForm .edit input:eq('+j+')').prop('checked',true);
-                            }
-                        }
-                    }
-                }
-            );
+            var roleIDArr=[];
+            for(var j=0;j<dataArr[0].roles.length;j++){
+                roleIDArr.push(dataArr[0].roles[j].roleId);
+            }
 
+			//将对应用户的角色列表显示到对应的修改页
+			for(var i=0;i<roleIDArr.length;i++){
+				for(var j=0;j<$('#editForm .edit input').length;j++){
+					if(roleIDArr[i]==$('#editForm .edit input:eq('+j+')').val()){
+						$('#editForm .edit input:eq('+j+')').prop('checked',true);
+					}
+				}
+			}
+			
         })
         /*
          * 用户管理增加用户页面所有事件
@@ -717,7 +721,7 @@
                 var _info = $('#addForm').serialize();
                 alert(_info)
                 $.post(
-                    "/user/addUser",
+                    "/user/add",
                     _info,
                     function(data){
                         //后台返回添加成功

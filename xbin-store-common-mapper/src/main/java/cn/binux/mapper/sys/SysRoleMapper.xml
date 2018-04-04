@@ -90,6 +90,14 @@
     from sys_role
     where role_id = #{roleId,jdbcType=INTEGER}
   </select>
+  <select id="selectRoleByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_role
+    where role_id IN
+    ( select ur.role_id from sys_user_role ur WHERE user_id=#{userId,jdbcType=INTEGER})
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from sys_role
     where role_id = #{roleId,jdbcType=INTEGER}

@@ -86,4 +86,9 @@ public class RoleServiceImpl implements RoleService {
     public XbinResult updateSysRoleById(SysRole sysRole) {
         return sysRoleMapper.updateByPrimaryKeySelective(sysRole)>0?XbinResult.ok():XbinResult.build(400,"更新失败");
     }
+
+    @Override
+    public List<SysRole> getSysRoleByUserId(Integer userId) {
+        return sysRoleMapper.selectRoleByUserId(userId);
+    }
 }
