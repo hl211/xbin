@@ -4,7 +4,9 @@
 |----|：-----：|
 使用`Spring Boot` 构建整个项目去除XML配置| y
 `Maven`构建项目 | y
+
 SpringBoot项目在IntelliJ IDEA中实现热部署|
+
 SpringBoot 自定义Starter |
 `Jenkins`作为持续集成|
  采用`Dubbox`作为RPC框架|  y
