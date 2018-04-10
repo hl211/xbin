@@ -1,6 +1,6 @@
 # 摘要
 ## xbin 是一个用springboot + mybatis + dubbox +druid 构建的学习项目 ##
-
+----------------
 # 完成情况
 1.  日志过滤器
 2.  数据库异常处理----有run捕获
@@ -12,8 +12,8 @@
 ----------------
 # 技术:
   ## 后台技术
-    |后台|完成情况|
-    |----|:----:|
+  |后台|完成情况|
+  |----|:----:|
  使用`Spring Boot` 构建整个项目去除XML配置 | y
  `Maven`构建项目 | y
 SpringBoot项目在IntelliJ IDEA中实现热部署 |
@@ -39,7 +39,7 @@ SpringBoot 自定义Starter |
   ## 前台
      + 采用基于[AdminLTE](https://github.com/almasaeed2010/AdminLTE)的[roncoo-adminLTE](https://github.com/roncoo/roncoo-adminLTE)(主要增加了Ajax的布局模式)
      + AdminLTE集成太多Js这里就不一一列举了
-
+----------------
 # 注意事项
 + 需要在百度网盘下载包:https://pan.baidu.com/s/1FFZ9fqNwzf8wIgdnRagLZQ , 并将maven 仓库指向他
 + lombok---用于pojo注解get与set的包，除了maven加依赖后，还需要在idea安装插件
