@@ -9,13 +9,13 @@
 5.  完成角色模块
 6.  完成权限模块
 7.  完成shiro权限控制
-
+----------------
 # 技术:
-	## 后台技术
-	|后台|完成情况|
-|----|:----:|
-使用`Spring Boot` 构建整个项目去除XML配置 | y
-`Maven`构建项目 | y
+  ## 后台技术
+    |后台|完成情况|
+    |----|:----:|
+ 使用`Spring Boot` 构建整个项目去除XML配置 | y
+ `Maven`构建项目 | y
 SpringBoot项目在IntelliJ IDEA中实现热部署 |
 SpringBoot 自定义Starter |
 `Jenkins`作为持续集成 |
@@ -36,9 +36,9 @@ SpringBoot 自定义Starter |
 
 - 在分布式事务上则采用了[TCC](https://github.com/changmingxie/tcc-transaction)解决订单支付方面时效性要求性高的分布式事务,可靠的消息服务则来解决如会计记录等时效性要求低的分布式事务.
 
-## 前台
-+ 采用基于[AdminLTE](https://github.com/almasaeed2010/AdminLTE)的[roncoo-adminLTE](https://github.com/roncoo/roncoo-adminLTE)(主要增加了Ajax的布局模式)
-+ AdminLTE集成太多Js这里就不一一列举了
+  ## 前台
+     + 采用基于[AdminLTE](https://github.com/almasaeed2010/AdminLTE)的[roncoo-adminLTE](https://github.com/roncoo/roncoo-adminLTE)(主要增加了Ajax的布局模式)
+     + AdminLTE集成太多Js这里就不一一列举了
 
 # 注意事项
 + 需要在百度网盘下载包:https://pan.baidu.com/s/1FFZ9fqNwzf8wIgdnRagLZQ , 并将maven 仓库指向他
