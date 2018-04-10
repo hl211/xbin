@@ -2,27 +2,25 @@
 
 |后台|完成情况|
 |----|:----:|
-使用`Spring Boot` 构建整个项目去除XML配置| y
+使用`Spring Boot` 构建整个项目去除XML配置 | y
 `Maven`构建项目 | y
-
-SpringBoot项目在IntelliJ IDEA中实现热部署|
-
+SpringBoot项目在IntelliJ IDEA中实现热部署 |
 SpringBoot 自定义Starter |
-`Jenkins`作为持续集成|
- 采用`Dubbox`作为RPC框架|  y
-`kryo`序列化|
-使用 `Apollo` 配置中心|
+`Jenkins`作为持续集成 |
+ 采用`Dubbox`作为RPC框架 |  y
+`kryo`序列化 |
+使用 `Apollo` 配置中心 |
 使用`Spring`+`Spring MVC`+`MyBatis`SSM框架  | y
-数据库连接池使用`druid`    |y
-数据库使用`MySQL`和`Redis`|
-页面引擎采用 `Beetl`|
-网页采用`freemarker`生成静态化页面|
-存储采用`FastDFS`存储图片等文件|
-采用`Solr`实现搜索服务|
-`Swagger2` 生成 RESTful Apis文档|
- 负载均衡使用`Nginx`、`keepalived`实现高可用  |y
-采用`Spring Scheduled`做任务调度|
-消息中间件采用`RabbitMQ`|
+数据库连接池使用`druid`    | y
+数据库使用`MySQL`和`Redis` |
+页面引擎采用 `Beetl` |
+网页采用`freemarker`生成静态化页面 |
+存储采用`FastDFS`存储图片等文件 |
+采用`Solr`实现搜索服务 |
+`Swagger2` 生成 RESTful Apis文档 |
+ 负载均衡使用`Nginx`、`keepalived`实现高可用  | y
+采用`Spring Scheduled`做任务调度 |
+消息中间件采用`RabbitMQ` |
 
 - 在分布式事务上则采用了[TCC](https://github.com/changmingxie/tcc-transaction)解决订单支付方面时效性要求性高的分布式事务,可靠的消息服务则来解决如会计记录等时效性要求低的分布式事务.
 
