@@ -2,9 +2,8 @@
 
 |后台|完成情况|
 |----|-----|
-你好|你好|
+使用`Spring Boot` 构建整个项目去除XML配置| y
 
-    *使用`Spring Boot` 构建整个项目去除XML配置 y
 	* `Maven`构建项目     y
 	* SpringBoot项目在IntelliJ IDEA中实现热部署
 	* SpringBoot 自定义Starter 
