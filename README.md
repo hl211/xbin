@@ -36,7 +36,7 @@ SpringBoot 自定义Starter |
 
 - 在分布式事务上则采用了[TCC](https://github.com/changmingxie/tcc-transaction)解决订单支付方面时效性要求性高的分布式事务,可靠的消息服务则来解决如会计记录等时效性要求低的分布式事务.
 
-  ## 前台
+## 前台
      + 采用基于[AdminLTE](https://github.com/almasaeed2010/AdminLTE)的[roncoo-adminLTE](https://github.com/roncoo/roncoo-adminLTE)(主要增加了Ajax的布局模式)
      + AdminLTE集成太多Js这里就不一一列举了
 ----------------
