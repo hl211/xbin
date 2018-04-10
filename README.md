@@ -1,5 +1,5 @@
 # 摘要
-##xbin 是一个用springboot + mybatis + dubbox +druid 构建的学习项目##
+## xbin 是一个用springboot + mybatis + dubbox +druid 构建的学习项目 ##
 
 # 后台技术:
 
